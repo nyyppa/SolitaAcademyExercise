@@ -1,0 +1,2 @@
+# SolitaAcademyExercise
+Solita Academy exercise
