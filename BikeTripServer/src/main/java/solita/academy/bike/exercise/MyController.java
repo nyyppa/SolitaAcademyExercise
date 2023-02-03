@@ -5,7 +5,6 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
@@ -29,6 +27,7 @@ public class MyController {
     BikeTripDatabaseHandler bikeTripDatabaseHandler;
 
     List<String>stations=new ArrayList<>();
+    String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};
 
     /**
      * Populates the database with some dummy blogs posts and their tags
@@ -36,12 +35,9 @@ public class MyController {
     @PostConstruct
     private void init(){
         try {
-            test("testi.csv");
-            //test("2021-05.csv");
-            //test("2021-06.csv");
-            //test("2021-07.csv");
-            //test("biketrip4.csv");
-            //test("biketrip5.csv");
+            for(String s:cvsFilesToImport){
+                readBikeTripsFromCVSFile(s);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
@@ -82,7 +78,11 @@ public class MyController {
         return "jotain";
     }
 
-    private void test(String filename) throws IOException, URISyntaxException, CsvValidationException {
+    private void readBikeStationsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
+
+    }
+
+    private void readBikeTripsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
         Path path = Paths.get(
                 ClassLoader.getSystemResource(filename).toURI());
         Reader reader = Files.newBufferedReader(path);
