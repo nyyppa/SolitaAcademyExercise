@@ -26,8 +26,11 @@ public class MyController {
     @Autowired
     BikeTripDatabaseHandler bikeTripDatabaseHandler;
 
+    @Autowired
+    BikeStationDatabaseHandler bikeStationDatabaseHandler;
     List<String>stations=new ArrayList<>();
     String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};
+    String bikeStationFile = "Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin.csv";
 
     /**
      * Populates the database with some dummy blogs posts and their tags
@@ -38,6 +41,8 @@ public class MyController {
             for(String s:cvsFilesToImport){
                 readBikeTripsFromCVSFile(s);
             }
+            readBikeStationsFromCVSFile(bikeStationFile);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
@@ -45,17 +50,9 @@ public class MyController {
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
-        List<BikeTrip>list=bikeTripDatabaseHandler.findAllByDepartureStation("Viiskulma").toList();
-        System.out.println("hello");
-        for(BikeTrip bikeTrip:list){
-            System.out.println(bikeTrip);
+        for(BikeStation bikeStation:bikeStationDatabaseHandler.findAll().toList()){
+            System.out.println(bikeStation);
         }
-        list=bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation("Viiskulma","Hernesaarenranta").toList();
-        System.out.println("hello");
-        for(BikeTrip bikeTrip:list){
-            System.out.println(bikeTrip);
-        }
-
     }
 
     @RequestMapping(path="/jotain",method={RequestMethod.POST, RequestMethod.GET})
@@ -79,7 +76,24 @@ public class MyController {
     }
 
     private void readBikeStationsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
-
+        Path path = Paths.get(
+                ClassLoader.getSystemResource(filename).toURI());
+        Reader reader = Files.newBufferedReader(path);
+        CSVParser parser = new CSVParserBuilder()
+                .withSeparator(',')
+                .withIgnoreQuotations(false)
+                .build();
+        CSVReader csvReader = new CSVReaderBuilder(reader)
+                .withSkipLines(1)
+                .withCSVParser(parser)
+                .build();
+        String[] line;
+        while ((line = csvReader.readNext()) != null) {
+            BikeStation bikeStation=BikeStation.createBikeStation(line);
+            if(bikeStation!=null){
+                bikeStationDatabaseHandler.save(bikeStation);
+            }
+        }
     }
 
     private void readBikeTripsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {

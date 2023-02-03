@@ -25,7 +25,7 @@ public class BikeStation {
     public BikeStation() {
     }
 
-    public BikeStation createBikeStation(String [] strings){
+    public static BikeStation createBikeStation(String [] strings){
         BikeStation bikeStation=new BikeStation();
         if(strings.length!=13){
             return null;
@@ -211,5 +211,24 @@ public class BikeStation {
 
     public void setY(String y) {
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "BikeStation{" +
+                "FID=" + FID +
+                ", ID=" + ID +
+                ", nimi='" + nimi + '\'' +
+                ", namn='" + namn + '\'' +
+                ", name='" + name + '\'' +
+                ", osoite='" + osoite + '\'' +
+                ", adress='" + adress + '\'' +
+                ", kaupunki='" + kaupunki + '\'' +
+                ", stad='" + stad + '\'' +
+                ", operaattor='" + operaattor + '\'' +
+                ", kapasiteet=" + kapasiteet +
+                ", x='" + x + '\'' +
+                ", y='" + y + '\'' +
+                '}';
     }
 }
