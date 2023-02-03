@@ -36,7 +36,12 @@ public class MyController {
     @PostConstruct
     private void init(){
         try {
-            test();
+            test("testi.csv");
+            //test("2021-05.csv");
+            //test("2021-06.csv");
+            //test("2021-07.csv");
+            //test("biketrip4.csv");
+            //test("biketrip5.csv");
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
@@ -74,13 +79,12 @@ public class MyController {
         if(stopStation.isPresent()){
             model.addAttribute("stopStation",stopStation);
         }
-
         return "jotain";
     }
 
-    private void test() throws IOException, URISyntaxException, CsvValidationException {
+    private void test(String filename) throws IOException, URISyntaxException, CsvValidationException {
         Path path = Paths.get(
-                ClassLoader.getSystemResource("2021-05.csv").toURI());
+                ClassLoader.getSystemResource(filename).toURI());
         Reader reader = Files.newBufferedReader(path);
 		CSVParser parser = new CSVParserBuilder()
 				.withSeparator(',')
@@ -92,8 +96,8 @@ public class MyController {
 				.build();
         String[] line;
         while ((line = csvReader.readNext()) != null) {
-            BikeTrip bikeTrip=new BikeTrip(line);
-            if (bikeTrip.getDuration()>10&&bikeTrip.getCoveredDistance()>10){
+            BikeTrip bikeTrip=BikeTrip.createNewBikeTrip(line);
+            if(bikeTrip!=null){
                 bikeTripDatabaseHandler.save(bikeTrip);
                 addNonUniqueStations(bikeTrip.departureStation);
                 addNonUniqueStations(bikeTrip.returnStation);

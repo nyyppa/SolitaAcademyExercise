@@ -8,6 +8,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -61,38 +67,103 @@ public class BikeTrip implements Serializable {
         setCoveredDistance(strings[6]);
         setDuration(strings[7]);
     }
+
+    public static BikeTrip createNewBikeTrip(String [] strings){
+        if(strings.length!=8){
+            System.out.println(strings.length);
+            return null;
+        }
+        BikeTrip bikeTrip=new BikeTrip();
+        bikeTrip.setDeparture(strings[0]);
+        if(bikeTrip.getDeparture()==null){
+            System.out.println("departure: "+strings[0]);
+            return null;
+        }
+        bikeTrip.setReturnTime(strings[1]);
+        if(bikeTrip.getReturnTime()==null){
+            System.out.println("Return Time: "+strings[1]);
+            return null;
+        }
+        bikeTrip.setDepartureStationID(strings[2]);
+        if(bikeTrip.getDepartureStationID()<=0){
+            System.out.println("getDepartureStationID: "+strings[2]);
+            return null;
+        }
+        bikeTrip.setDepartureStation(strings[3]);
+        if(bikeTrip.getDepartureStation()==null||bikeTrip.getDepartureStation().isEmpty()){
+            System.out.println("getDepartureStation: "+strings[3]);
+            return null;
+        }
+        bikeTrip.setReturnStationID(strings[4]);
+        if(bikeTrip.getReturnStationID()<=0){
+            System.out.println("getReturnStationID: "+strings[4]);
+            return null;
+        }
+        bikeTrip.setReturnStation(strings[5]);
+        if(bikeTrip.getReturnStation()==null||bikeTrip.getReturnStation().isEmpty()){
+            System.out.println("getReturnStation: "+strings[5]);
+            return null;
+        }
+        bikeTrip.setCoveredDistance(strings[6]);
+        if(bikeTrip.getCoveredDistance()<=10){
+            //System.out.println("getCoveredDistance: "+strings[6]);
+            return null;
+        }
+        bikeTrip.setDuration(strings[7]);
+        if(bikeTrip.getDuration()<=10){
+            System.out.println("getDuration: "+strings[7]);
+            return null;
+        }
+        return bikeTrip;
+    }
     public void setDeparture(String s){
         try {
             departure =new Timestamp (obj.parse(s).getTime());
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
     public void setReturnTime(String s){
         try {
             returnTime =new Timestamp(obj.parse(s).getTime());
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
     public void setDepartureStationID(String s){
-        departureStationID =Integer.parseInt(s);
+        if(s==null||s.isEmpty()){
+            departureStationID=-1;
+        }else{
+            departureStationID =Integer.parseInt(s);
+        }
     }
     public void setReturnStationID(String s){
-        returnStationID =Integer.parseInt(s);
+        if(s==null||s.isEmpty()){
+            returnStationID=-1;
+        }else{
+            returnStationID =Integer.parseInt(s);
+        }
     }
     public void setCoveredDistance(String s){
-        coveredDistance =Double.parseDouble(s);
+        if(s==null||s.isEmpty()){
+            coveredDistance=-1;
+        }else{
+            coveredDistance =Double.parseDouble(s);
+        }
     }
     public void setDuration(String s){
-        duration =Integer.parseInt(s);
+        if(s==null||s.isEmpty()){
+            duration=-1;
+        }else{
+            duration =Integer.parseInt(s);
+        }
     }
     public Timestamp getDeparture() {
         return departure;
     }
 
     public void setDeparture(Timestamp departure) {
-        departure = departure;
+        this.departure = departure;
     }
 
     public Timestamp getReturnTime() {
@@ -108,7 +179,7 @@ public class BikeTrip implements Serializable {
     }
 
     public void setDepartureStationID(int departureStationID) {
-        departureStationID = departureStationID;
+        this.departureStationID = departureStationID;
     }
 
     public String getDepartureStation() {
@@ -132,7 +203,7 @@ public class BikeTrip implements Serializable {
     }
 
     public void setReturnStationID(int returnStationID) {
-        returnStationID = returnStationID;
+        this.returnStationID = returnStationID;
     }
 
     public double getCoveredDistance() {
@@ -140,7 +211,7 @@ public class BikeTrip implements Serializable {
     }
 
     public void setCoveredDistance(int coveredDistance) {
-        coveredDistance = coveredDistance;
+        this.coveredDistance = coveredDistance;
     }
 
     public int getDuration() {
@@ -148,7 +219,7 @@ public class BikeTrip implements Serializable {
     }
 
     public void setDuration(int duration) {
-        duration = duration;
+        this.duration = duration;
     }
 
     @Override
