@@ -5,5 +5,7 @@ import org.springframework.data.util.Streamable;
 
 public interface BikeTripDatabaseHandler extends CrudRepository<BikeTrip,Integer> {
 
-    Streamable<BikeTrip> findByDepartureStationContaining(String search);
+    Streamable<BikeTrip> findAllByDepartureStation(String search);
+
+    Streamable<BikeTrip> findAllByDepartureStationAndReturnStation(String search,String s);
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <form action="jotain" method="post" id="submitForm">
+        <p>
+            <select class="form-control" id="startStation" form="submitForm" name="startStation">
+                <option th:each="option : ${options}"  th:value="${option}" th:text="${option}"></option>
+            </select>
+            <select class="form-control" id="stopStation" form="submitForm" name="stopStation">
+                <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+            </select>
+            <input type="submit" value="Save to DB" />
+        </p>
+    </form>
+
+    <table th:object="${form}">
+        <thead>
+        <tr>
+            <th> Start Station</th>
+            <th> Stop Station</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bikeTrip, itemStat : *{bikeTrips}">
+            <td><input th:field="*{bikeTrips[__${itemStat.index}__].departureStation}" /></td>
+            <td><input th:field="*{bikeTrips[__${itemStat.index}__].returnStation}" /></td>
+        </tr>
+        </tbody>
+    </table>
+
+</head>
+<body>
+
+</body>
+</html>

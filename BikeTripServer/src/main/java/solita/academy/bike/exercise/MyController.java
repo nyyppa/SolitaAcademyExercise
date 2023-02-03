@@ -5,26 +5,30 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
-@RestController
+@Controller
 public class MyController {
     @Autowired
     BikeTripDatabaseHandler bikeTripDatabaseHandler;
 
+    List<String>stations=new ArrayList<>();
 
     /**
      * Populates the database with some dummy blogs posts and their tags
@@ -40,16 +44,47 @@ public class MyController {
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
+        List<BikeTrip>list=bikeTripDatabaseHandler.findAllByDepartureStation("Viiskulma").toList();
+        System.out.println("hello");
+        for(BikeTrip bikeTrip:list){
+            System.out.println(bikeTrip);
+        }
+        list=bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation("Viiskulma","Hernesaarenranta").toList();
+        System.out.println("hello");
+        for(BikeTrip bikeTrip:list){
+            System.out.println(bikeTrip);
+        }
+
     }
 
+    @RequestMapping(path="/jotain",method={RequestMethod.POST, RequestMethod.GET})
+    public String populateList(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
+        BikeTripListHolder bikeTripListHolder=new BikeTripListHolder();
+        if(startStation.isPresent()&&stopStation.isPresent()){
+            bikeTripListHolder.setBikeTrips(bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation(startStation.get(),stopStation.get()).toList());
+            model.addAttribute("form",bikeTripListHolder);
+        }else{
+            model.addAttribute("form",bikeTripListHolder);
+        }
+        model.addAttribute("options", stations);
+        if(startStation.isPresent()){
+            model.addAttribute("startStation",startStation);
+
+        }
+        if(stopStation.isPresent()){
+            model.addAttribute("stopStation",stopStation);
+        }
+
+        return "jotain";
+    }
 
     private void test() throws IOException, URISyntaxException, CsvValidationException {
         Path path = Paths.get(
-                ClassLoader.getSystemResource("testi.csv").toURI());
+                ClassLoader.getSystemResource("2021-05.csv").toURI());
         Reader reader = Files.newBufferedReader(path);
 		CSVParser parser = new CSVParserBuilder()
 				.withSeparator(',')
-				.withIgnoreQuotations(true)
+				.withIgnoreQuotations(false)
 				.build();
 		CSVReader csvReader = new CSVReaderBuilder(reader)
 				.withSkipLines(1)
@@ -58,8 +93,20 @@ public class MyController {
         String[] line;
         while ((line = csvReader.readNext()) != null) {
             BikeTrip bikeTrip=new BikeTrip(line);
-            System.out.println(bikeTrip);
-            bikeTripDatabaseHandler.save(bikeTrip);
+            if (bikeTrip.getDuration()>10&&bikeTrip.getCoveredDistance()>10){
+                bikeTripDatabaseHandler.save(bikeTrip);
+                addNonUniqueStations(bikeTrip.departureStation);
+                addNonUniqueStations(bikeTrip.returnStation);
+            }
+        }
+        for(String s:stations){
+            System.out.println(s);
+        }
+    }
+
+    private void addNonUniqueStations(String station){
+        if(!stations.contains(station)){
+            stations.add(station);
         }
     }
 
