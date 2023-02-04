@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Collator;
 import java.util.*;
 
 @Controller
@@ -31,6 +32,7 @@ public class MyController {
     List<String>stations=new ArrayList<>();
     String [] cvsFilesToImport={"2021-05.csv"};//{"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"testi.csv"};//
     String bikeStationFile = "Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin.csv";
+
 
     /**
      * Populates the database with some dummy blogs posts and their tags
@@ -51,6 +53,7 @@ public class MyController {
             throw new RuntimeException(e);
         }
         stations=BikeStation.getAllNimisInBikeStations(bikeStationDatabaseHandler.findAll().toList());
+        Collections.sort(stations);
         /*
         for(BikeTrip bikeTrip:bikeTripDatabaseHandler.findAll().toList()){
             System.out.println(bikeTrip);
