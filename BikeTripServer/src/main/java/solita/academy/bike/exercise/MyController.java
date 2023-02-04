@@ -67,7 +67,7 @@ public class MyController {
         }*/
     }
 
-    @RequestMapping(path="/jotain",method={RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path="/journeys",method={RequestMethod.POST, RequestMethod.GET})
     public String populateList(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
         BikeTripListHolder bikeTripListHolder=new BikeTripListHolder();
         BikeStationListHolder bikeStationListHolder=new BikeStationListHolder();
@@ -92,7 +92,7 @@ public class MyController {
             model.addAttribute("stopStation",stations.get(0));
             System.out.println("WOLOLOOO"+model.getAttribute("stopStation"));
         }*/
-        return "jotain";
+        return "journeys";
     }
 
     private void readBikeStationsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
