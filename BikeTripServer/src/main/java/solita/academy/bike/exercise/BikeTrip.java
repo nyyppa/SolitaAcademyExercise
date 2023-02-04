@@ -41,6 +41,9 @@ public class BikeTrip implements Serializable {
     @Column
     int duration;
 
+    int durationAsMinutes;
+    double distanceAsKM;
+
     static SimpleDateFormat obj = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public BikeTrip(){
@@ -114,6 +117,8 @@ public class BikeTrip implements Serializable {
             System.out.println("getDuration: "+strings[7]);
             return null;
         }
+        bikeTrip.durationAsMinutes= bikeTrip.getDurationAsMinutes();
+        bikeTrip.distanceAsKM= bikeTrip.getDistanceAsKM();
         return bikeTrip;
     }
     public void setDeparture(String s){
@@ -220,6 +225,13 @@ public class BikeTrip implements Serializable {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getDurationAsMinutes(){
+        return Math.round(duration/60);
+    }
+    public double getDistanceAsKM(){
+        return Math.round(coveredDistance/1000d*10d)/10d;
     }
 
     @Override

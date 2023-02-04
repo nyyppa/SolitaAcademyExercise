@@ -7,9 +7,11 @@
     <form action="jotain" method="post" id="submitForm">
         <p>
             <select class="form-control" id="startStation" form="submitForm" name="startStation">
-                <option th:each="option : ${options}"  th:value="${option}" th:text="${option}"></option>
+                <!--<option th:value="${startStation}" th:text="${startStation.get()}"></option>-->
+                <option th:each="option : ${options}"  th:value="${option}" th:text="${option}" ></option>
             </select>
             <select class="form-control" id="stopStation" form="submitForm" name="stopStation">
+                <!--<option th:value="${stopStation.get()}" th:text="${stopStation.get()}"></option>-->
                 <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
             </select>
             <input type="submit" value="Save to DB" />
@@ -21,12 +23,16 @@
         <tr>
             <th> Start Station</th>
             <th> Stop Station</th>
+            <th> Trip distance as km</th>
+            <th> Trip duration as minutes</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="bikeTrip, itemStat : *{bikeTrips}">
             <td><input th:field="*{bikeTrips[__${itemStat.index}__].departureStation}" /></td>
             <td><input th:field="*{bikeTrips[__${itemStat.index}__].returnStation}" /></td>
+            <td><input th:field="*{bikeTrips[__${itemStat.index}__].distanceAsKM}" /></td>
+            <td><input th:field="*{bikeTrips[__${itemStat.index}__].durationAsMinutes}" /></td>
         </tr>
         </tbody>
     </table>

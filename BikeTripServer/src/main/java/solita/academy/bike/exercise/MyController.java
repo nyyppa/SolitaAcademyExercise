@@ -77,14 +77,21 @@ public class MyController {
         }else{
             model.addAttribute("form",bikeTripListHolder);
         }
+        //model.addAttribute("startStation",stations.get(0));
+        //model.addAttribute("stopStation",stations.get(0));
         model.addAttribute("options", stations);
         if(startStation.isPresent()){
             model.addAttribute("startStation",startStation);
-
-        }
+        }/*else{
+            model.addAttribute("startStation",stations.get(0));
+            System.out.println(model.getAttribute("startStation")+"WOLOLOOO");
+        }*/
         if(stopStation.isPresent()){
             model.addAttribute("stopStation",stopStation);
-        }
+        }/*else{
+            model.addAttribute("stopStation",stations.get(0));
+            System.out.println("WOLOLOOO"+model.getAttribute("stopStation"));
+        }*/
         return "jotain";
     }
 
