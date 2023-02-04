@@ -47,14 +47,14 @@ public class BikeTrip implements Serializable {
 
     }
     public BikeTrip(Timestamp departure, Timestamp Return, int departureStationID, String departureStation, String returnStation, int returnStationID, int coveredDistance, int duration) {
-        departure = departure;
+        this.departure = departure;
         this.returnTime = Return;
-        departureStationID = departureStationID;
-        departureStation = departureStation;
-        returnStation = returnStation;
-        returnStationID = returnStationID;
-        coveredDistance = coveredDistance;
-        duration = duration;
+        this.departureStationID = departureStationID;
+        this.departureStation = departureStation;
+        this.returnStation = returnStation;
+        this.returnStationID = returnStationID;
+        this.coveredDistance = coveredDistance;
+        this.duration = duration;
     }
 
     public BikeTrip(String[]strings){

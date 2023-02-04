@@ -29,7 +29,7 @@ public class MyController {
     @Autowired
     BikeStationDatabaseHandler bikeStationDatabaseHandler;
     List<String>stations=new ArrayList<>();
-    String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};
+    String [] cvsFilesToImport={"2021-05.csv"};//{"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"testi.csv"};//
     String bikeStationFile = "Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin.csv";
 
     /**
@@ -50,14 +50,24 @@ public class MyController {
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
-        for(BikeStation bikeStation:bikeStationDatabaseHandler.findAll().toList()){
-            System.out.println(bikeStation);
+        stations=BikeStation.getAllNimisInBikeStations(bikeStationDatabaseHandler.findAll().toList());
+        /*
+        for(BikeTrip bikeTrip:bikeTripDatabaseHandler.findAll().toList()){
+            System.out.println(bikeTrip);
         }
+        for(String s:stations){
+            for(String ss:stations){
+                for(BikeTrip bikeTrip:bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation(s,ss).toList()){
+                    System.out.println(bikeTrip);
+                }
+            }
+        }*/
     }
 
     @RequestMapping(path="/jotain",method={RequestMethod.POST, RequestMethod.GET})
     public String populateList(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
         BikeTripListHolder bikeTripListHolder=new BikeTripListHolder();
+        BikeStationListHolder bikeStationListHolder=new BikeStationListHolder();
         if(startStation.isPresent()&&stopStation.isPresent()){
             bikeTripListHolder.setBikeTrips(bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation(startStation.get(),stopStation.get()).toList());
             model.addAttribute("form",bikeTripListHolder);
@@ -109,16 +119,14 @@ public class MyController {
 				.withCSVParser(parser)
 				.build();
         String[] line;
+
         while ((line = csvReader.readNext()) != null) {
             BikeTrip bikeTrip=BikeTrip.createNewBikeTrip(line);
             if(bikeTrip!=null){
                 bikeTripDatabaseHandler.save(bikeTrip);
-                addNonUniqueStations(bikeTrip.departureStation);
-                addNonUniqueStations(bikeTrip.returnStation);
+                //addNonUniqueStations(bikeTrip.departureStation);
+                //addNonUniqueStations(bikeTrip.returnStation);
             }
-        }
-        for(String s:stations){
-            System.out.println(s);
         }
     }
 

@@ -2,6 +2,8 @@ package solita.academy.bike.exercise;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class BikeStation {
@@ -211,6 +213,14 @@ public class BikeStation {
 
     public void setY(String y) {
         this.y = y;
+    }
+
+    public static List<String> getAllNimisInBikeStations(List<BikeStation>bikeStations){
+        List<String> stationNimis=new ArrayList<>(bikeStations.size());
+        for(BikeStation bikeStation:bikeStations){
+            stationNimis.add(bikeStation.getNimi());
+        }
+        return stationNimis;
     }
 
     @Override
