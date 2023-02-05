@@ -17,6 +17,9 @@ import java.util.Locale;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Class representing single bike trip. Contains all the date and is used to represent it in database
+ */
 @Entity
 public class BikeTrip implements Serializable {
 
@@ -71,6 +74,11 @@ public class BikeTrip implements Serializable {
         setDuration(strings[7]);
     }
 
+    /**
+     * Creates bike trip from string array containing needed data. Also does basic data validation
+     * @param strings String array containing data needed to create BikeTrip. in order departure time, return time, departure station ID, departure station ID, return station, covered distance, duration
+     * @return BikeTrip constructed from given data
+     */
     public static BikeTrip createNewBikeTrip(String [] strings){
         if(strings.length!=8){
             System.out.println(strings.length);
@@ -79,42 +87,34 @@ public class BikeTrip implements Serializable {
         BikeTrip bikeTrip=new BikeTrip();
         bikeTrip.setDeparture(strings[0]);
         if(bikeTrip.getDeparture()==null){
-            System.out.println("departure: "+strings[0]);
             return null;
         }
         bikeTrip.setReturnTime(strings[1]);
         if(bikeTrip.getReturnTime()==null){
-            System.out.println("Return Time: "+strings[1]);
             return null;
         }
         bikeTrip.setDepartureStationID(strings[2]);
         if(bikeTrip.getDepartureStationID()<=0){
-            System.out.println("getDepartureStationID: "+strings[2]);
             return null;
         }
         bikeTrip.setDepartureStation(strings[3]);
         if(bikeTrip.getDepartureStation()==null||bikeTrip.getDepartureStation().isEmpty()){
-            System.out.println("getDepartureStation: "+strings[3]);
             return null;
         }
         bikeTrip.setReturnStationID(strings[4]);
         if(bikeTrip.getReturnStationID()<=0){
-            System.out.println("getReturnStationID: "+strings[4]);
             return null;
         }
         bikeTrip.setReturnStation(strings[5]);
         if(bikeTrip.getReturnStation()==null||bikeTrip.getReturnStation().isEmpty()){
-            System.out.println("getReturnStation: "+strings[5]);
             return null;
         }
         bikeTrip.setCoveredDistance(strings[6]);
         if(bikeTrip.getCoveredDistance()<=10){
-            //System.out.println("getCoveredDistance: "+strings[6]);
             return null;
         }
         bikeTrip.setDuration(strings[7]);
         if(bikeTrip.getDuration()<=10){
-            System.out.println("getDuration: "+strings[7]);
             return null;
         }
         bikeTrip.durationAsMinutes= bikeTrip.getDurationAsMinutes();

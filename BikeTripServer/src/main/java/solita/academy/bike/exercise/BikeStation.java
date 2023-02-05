@@ -1,32 +1,54 @@
 package solita.academy.bike.exercise;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing single bike station. It holds all of needed data and also is used to represent it in database
+ *
+ */
 @Entity
 public class BikeStation {
 
+    @Column
     int FID;
     @Id
     int ID;
 
+    @Column
     String nimi;
+    @Column
     String namn;
+    @Column
     String name;
+    @Column
     String osoite;
+    @Column
     String adress;
+    @Column
     String kaupunki;
+    @Column
     String stad;
+    @Column
     String operaattor;
+    @Column
     int kapasiteet;
+    @Column
     String x;
+    @Column
     String y;
 
     public BikeStation() {
     }
 
+    /**
+     * Creates BikeStation from given strings and does some basic validation of given information
+     * @param strings Array of Strings containing all Bike Stations information. In order FID, ID, Nimi, Namn, Name, Osoite, Adress, Kaupunki, Stad, Operaattor, Kapasiteet, X, Y
+     * @return BikeStation created from given information
+     */
     public static BikeStation createBikeStation(String [] strings){
         BikeStation bikeStation=new BikeStation();
         if(strings.length!=13){
@@ -215,6 +237,11 @@ public class BikeStation {
         this.y = y;
     }
 
+    /**
+     * finds all Nimis in given list of bikeStations
+     * @param bikeStations List containing BikeStations you want to find Nimis from
+     * @return list containing all Nimis
+     */
     public static List<String> getAllNimisInBikeStations(List<BikeStation>bikeStations){
         List<String> stationNimis=new ArrayList<>(bikeStations.size());
         for(BikeStation bikeStation:bikeStations){
@@ -223,12 +250,29 @@ public class BikeStation {
         return stationNimis;
     }
 
+    /**
+     * gets the number of bike trips originating from this bike station
+     * @param bikeTripDatabaseHandler Database containing bike trips
+     * @return number of bike trips originating from here
+     */
     public long getTotalJourneysFromHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
         return bikeTripDatabaseHandler.countByDepartureStation(getNimi());
     }
+
+    /**
+     * gets the number of bike trips ending to this bike station
+     * @param bikeTripDatabaseHandler Database containing bike trips
+     * @return number of bike trips to here
+     */
     public long getTotalJourneysToHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
         return bikeTripDatabaseHandler.countByReturnStation(getNimi());
     }
+
+    /**
+     * counts average distance travelled here
+     * @param bikeTripDatabaseHandler Database containing bike trips
+     * @return average distance travelled to here
+     */
     public double getAvarageDistanseToHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
         List<BikeTrip> bikeTrips=bikeTripDatabaseHandler.findAllByReturnStation(getNimi()).toList();
         double distance=0;
@@ -239,6 +283,11 @@ public class BikeStation {
         return Math.round(distance/1000d*10d)/10d;
     }
 
+    /**
+     * counts average distance travelled from here
+     * @param bikeTripDatabaseHandler Database containing bike trips
+     * @return average distance travelled from here
+     */
     public double getAvarageDistanseFromHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
         List<BikeTrip> bikeTrips=bikeTripDatabaseHandler.findAllByDepartureStation(getNimi()).toList();
         double distance=0;

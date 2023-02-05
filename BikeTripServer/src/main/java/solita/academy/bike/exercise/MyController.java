@@ -22,6 +22,9 @@ import java.nio.file.Paths;
 import java.text.Collator;
 import java.util.*;
 
+/**
+ * Controller for the html files.
+ */
 @Controller
 public class MyController {
     @Autowired
@@ -30,12 +33,11 @@ public class MyController {
     @Autowired
     BikeStationDatabaseHandler bikeStationDatabaseHandler;
     List<String>stations=new ArrayList<>();
-    String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"testi.csv"};////{"2021-05.csv"};//
+    String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"biketrip1.csv"};//;//;////{"2021-05.csv"};//
     String bikeStationFile = "Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin.csv";
 
-
     /**
-     * Populates the database with some dummy blogs posts and their tags
+     * Reads data from cvs files and imports it to database
      */
     @PostConstruct
     private void init(){
@@ -54,19 +56,14 @@ public class MyController {
         }
         stations=BikeStation.getAllNimisInBikeStations(bikeStationDatabaseHandler.findAll().toList());
         Collections.sort(stations);
-        /*
-        for(BikeTrip bikeTrip:bikeTripDatabaseHandler.findAll().toList()){
-            System.out.println(bikeTrip);
-        }
-        for(String s:stations){
-            for(String ss:stations){
-                for(BikeTrip bikeTrip:bikeTripDatabaseHandler.findAllByDepartureStationAndReturnStation(s,ss).toList()){
-                    System.out.println(bikeTrip);
-                }
-            }
-        }*/
     }
 
+    /**
+     * handles data for station html
+     * @param station
+     * @param model
+     * @return
+     */
     @RequestMapping(path="/station",method={RequestMethod.POST, RequestMethod.GET})
     public String station(@RequestParam Optional<String> station, Model model) {
         if(station.isPresent()) {
@@ -82,6 +79,13 @@ public class MyController {
         return "station";
     }
 
+    /**
+     * handles data for journeys html
+     * @param startStation
+     * @param stopStation
+     * @param model
+     * @return
+     */
     @RequestMapping(path="/journeys",method={RequestMethod.POST, RequestMethod.GET})
     public String journeys(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
         BikeTripListHolder bikeTripListHolder=new BikeTripListHolder();
@@ -92,24 +96,23 @@ public class MyController {
         }else{
             model.addAttribute("form",bikeTripListHolder);
         }
-        //model.addAttribute("startStation",stations.get(0));
-        //model.addAttribute("stopStation",stations.get(0));
         model.addAttribute("options", stations);
         if(startStation.isPresent()){
             model.addAttribute("startStation",startStation);
-        }/*else{
-            model.addAttribute("startStation",stations.get(0));
-            System.out.println(model.getAttribute("startStation")+"WOLOLOOO");
-        }*/
+        }
         if(stopStation.isPresent()){
             model.addAttribute("stopStation",stopStation);
-        }/*else{
-            model.addAttribute("stopStation",stations.get(0));
-            System.out.println("WOLOLOOO"+model.getAttribute("stopStation"));
-        }*/
+        }
         return "journeys";
     }
 
+    /**
+     * Reads bikeStations from cvs file in resources folder
+     * @param filename name of the file
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws CsvValidationException
+     */
     private void readBikeStationsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
         Path path = Paths.get(
                 ClassLoader.getSystemResource(filename).toURI());
@@ -131,6 +134,13 @@ public class MyController {
         }
     }
 
+    /**
+     * Reads bikeTrips from cvs file in resources folder
+     * @param filename name of the file
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws CsvValidationException
+     */
     private void readBikeTripsFromCVSFile(String filename) throws IOException, URISyntaxException, CsvValidationException {
         Path path = Paths.get(
                 ClassLoader.getSystemResource(filename).toURI());
@@ -149,17 +159,7 @@ public class MyController {
             BikeTrip bikeTrip=BikeTrip.createNewBikeTrip(line);
             if(bikeTrip!=null){
                 bikeTripDatabaseHandler.save(bikeTrip);
-                //addNonUniqueStations(bikeTrip.departureStation);
-                //addNonUniqueStations(bikeTrip.returnStation);
             }
         }
     }
-
-    private void addNonUniqueStations(String station){
-        if(!stations.contains(station)){
-            stations.add(station);
-        }
-    }
-
-
 }
