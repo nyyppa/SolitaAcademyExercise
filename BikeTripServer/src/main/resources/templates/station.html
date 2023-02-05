@@ -2,39 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <title>Title</title>
 
-    <form action="station" method="post" id="submitForm">
-        <p>
-            <select class="form-control" id="station" form="submitForm" name="station">
-                <!--<option th:value="${startStation}" th:text="${startStation.get()}"></option>-->
-                <option th:each="option : ${options}"  th:value="${option}" th:text="${option}" ></option>
-            </select>
-            <input type="submit" value="Save to DB" />
-        </p>
-    </form>
 
-    <table th:object="${form}">
-        <thead>
-        <tr>
-            <th> Station name</th>
-            <th> Station address</th>
-            <th> journeys to</th>
-            <th> journeys from</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><option th:text="${name}" /></td>
-            <td><option th:text="${address}" /></td>
-            <td><option th:text="${journeysTo}" /></td>
-            <td><option th:text="${journeysFrom}" /></td>
-        </tr>
-        </tbody>
-    </table>
 
 </head>
 <body>
+<div align="left">
+    <a href="http://localhost:8081/journeys">click here for journeys view</a>
+</div>
 
+<form action="station" method="post" id="submitForm">
+    <p>
+        <select class="form-control" id="station" form="submitForm" name="station">
+            <!--<option th:value="${startStation}" th:text="${startStation.get()}"></option>-->
+            <option th:each="option : ${options}"  th:value="${option}" th:text="${option}" ></option>
+        </select>
+        <input type="submit" value="Save to DB" />
+    </p>
+</form>
+
+<table th:object="${form}">
+    <thead>
+    <tr>
+        <th> Station name</th>
+        <th> Station address</th>
+        <th> journeys to</th>
+        <th> journeys from</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><option th:text="${name}" /></td>
+        <td><option th:text="${address}" /></td>
+        <td><option th:text="${journeysTo}" /></td>
+        <td><option th:text="${journeysFrom}" /></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
