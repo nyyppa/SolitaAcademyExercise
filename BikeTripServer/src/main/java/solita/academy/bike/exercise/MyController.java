@@ -30,7 +30,7 @@ public class MyController {
     @Autowired
     BikeStationDatabaseHandler bikeStationDatabaseHandler;
     List<String>stations=new ArrayList<>();
-    String [] cvsFilesToImport={"2021-05.csv"};//{"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"testi.csv"};//
+    String [] cvsFilesToImport={"biketrip1.csv","biketrip2.csv","biketrip3.csv","biketrip4.csv","biketrip5.csv"};//{"testi.csv"};////{"2021-05.csv"};//
     String bikeStationFile = "Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin.csv";
 
 
