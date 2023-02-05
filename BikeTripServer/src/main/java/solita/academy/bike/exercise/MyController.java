@@ -75,6 +75,8 @@ public class MyController {
             model.addAttribute("address", bikeStation.getOsoite());
             model.addAttribute("journeysTo", bikeStation.getTotalJourneysToHere(bikeTripDatabaseHandler));
             model.addAttribute("journeysFrom", bikeStation.getTotalJourneysFromHere(bikeTripDatabaseHandler));
+            model.addAttribute("averageTo",bikeStation.getAvarageDistanseToHere(bikeTripDatabaseHandler));
+            model.addAttribute("averageFrom",bikeStation.getAvarageDistanseFromHere(bikeTripDatabaseHandler));
         }
         model.addAttribute("options", stations);
         return "station";

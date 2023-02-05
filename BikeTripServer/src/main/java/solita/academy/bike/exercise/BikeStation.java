@@ -229,6 +229,26 @@ public class BikeStation {
     public long getTotalJourneysToHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
         return bikeTripDatabaseHandler.countByReturnStation(getNimi());
     }
+    public double getAvarageDistanseToHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
+        List<BikeTrip> bikeTrips=bikeTripDatabaseHandler.findAllByReturnStation(getNimi()).toList();
+        double distance=0;
+        for (BikeTrip bikeTrip:bikeTrips){
+            distance+=bikeTrip.getCoveredDistance();
+        }
+        distance=distance/bikeTrips.size();
+        return Math.round(distance/1000d*10d)/10d;
+    }
+
+    public double getAvarageDistanseFromHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
+        List<BikeTrip> bikeTrips=bikeTripDatabaseHandler.findAllByDepartureStation(getNimi()).toList();
+        double distance=0;
+        for (BikeTrip bikeTrip:bikeTrips){
+            distance+=bikeTrip.getCoveredDistance();
+        }
+        distance=distance/bikeTrips.size();
+        return Math.round(distance/1000d*10d)/10d;
+    }
+
 
 
 
