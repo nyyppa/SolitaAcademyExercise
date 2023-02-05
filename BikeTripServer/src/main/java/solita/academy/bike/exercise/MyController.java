@@ -67,8 +67,21 @@ public class MyController {
         }*/
     }
 
+    @RequestMapping(path="/station",method={RequestMethod.POST, RequestMethod.GET})
+    public String station(@RequestParam Optional<String> station, Model model) {
+        if(station.isPresent()) {
+            BikeStation bikeStation = bikeStationDatabaseHandler.findByNimi(station.get());
+            model.addAttribute("name", bikeStation.getNimi());
+            model.addAttribute("address", bikeStation.getOsoite());
+            model.addAttribute("journeysTo", bikeStation.getTotalJourneysToHere(bikeTripDatabaseHandler));
+            model.addAttribute("journeysFrom", bikeStation.getTotalJourneysFromHere(bikeTripDatabaseHandler));
+        }
+        model.addAttribute("options", stations);
+        return "station";
+    }
+
     @RequestMapping(path="/journeys",method={RequestMethod.POST, RequestMethod.GET})
-    public String populateList(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
+    public String journeys(@RequestParam Optional<String> startStation,@RequestParam Optional<String> stopStation, Model model) {
         BikeTripListHolder bikeTripListHolder=new BikeTripListHolder();
         BikeStationListHolder bikeStationListHolder=new BikeStationListHolder();
         if(startStation.isPresent()&&stopStation.isPresent()){

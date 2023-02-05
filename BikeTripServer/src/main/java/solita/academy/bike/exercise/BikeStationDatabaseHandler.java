@@ -5,4 +5,5 @@ import org.springframework.data.util.Streamable;
 
 public interface BikeStationDatabaseHandler extends CrudRepository<BikeStation,Integer> {
     Streamable<BikeStation> findAll();
+    BikeStation findByNimi(String search);
 }

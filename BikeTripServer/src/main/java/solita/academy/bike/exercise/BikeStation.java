@@ -223,6 +223,15 @@ public class BikeStation {
         return stationNimis;
     }
 
+    public long getTotalJourneysFromHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
+        return bikeTripDatabaseHandler.countByDepartureStation(getNimi());
+    }
+    public long getTotalJourneysToHere(BikeTripDatabaseHandler bikeTripDatabaseHandler){
+        return bikeTripDatabaseHandler.countByReturnStation(getNimi());
+    }
+
+
+
     @Override
     public String toString() {
         return "BikeStation{" +
